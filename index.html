@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+            <meta name = "viewport" content = "user-scalable=no,width=device-width" />
+            <script type="text/javascript" charset="utf-8" src="cordova-1.6.1.js"></script>
+            <!---
+             <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
+             <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
+             --->
+            <script type="text/javascript">
+                strBackgroundSelected = "";
+                strPlaneSelected = "";
+                function preventBehavior(e){ 
+                    e.preventDefault(); 
+                };
+                document.addEventListener("touchmove", preventBehavior, false);
+                document.addEventListener("touchstart", preventBehavior, false);
+                function funHideItem(inc_element_id){
+                    document.getElementById(inc_element_id).style.visibility = "hidden";
+                    document.getElementById(inc_element_id).style.display = "none";
+                }
+                function funShowItem(inc_element_id){
+                    document.getElementById(inc_element_id).style.visibility = "visible";
+                    document.getElementById(inc_element_id).style.display = "block";
+                }
+                
+                
+                function funSuccess(){
+                    //alert("caller is " + arguments.callee.toString());
+                }
+                
+                function funError(){
+                    //alert("error");
+                }
+                
+                
+                var mp3_buttons = "";
+                
+                var mp3_beach_piper = "";
+                var mp3_beach_boeing = "";
+                var mp3_beach_f16 = "";
+                var mp3_beach_sr71 = "";
+                
+                var mp3_city_piper = "";
+                var mp3_city_boeing = "";
+                var mp3_city_f16 = "";
+                var mp3_city_sr71 = "";
+                
+                var mp3_desert_piper = "";
+                var mp3_desert_boeing = "";
+                var mp3_desert_f16 = "";
+                var mp3_desert_sr71 = "";
+                
+                var mp3_forest_piper = "";
+                var mp3_forest_boeing = "";
+                var mp3_forest_f16 = "";
+                var mp3_forest_sr71 = "";
+                
+                
+                
+                
+                var arrDevice = new Array();
+                var objDevices = {  
+                    ipad:   {   
+                        name:           "ipad",     
+                        width:          1024,    
+                        height:         768,
+                        beach_width:    5466,
+                        city_width:     5718,
+                        desert_width:   5677,
+                        forest_width:   5489
+                    },
+                    ipad3:  {   
+                        name:           "ipad3",    
+                        width:          2048,    
+                        height:         1536,
+                        beach_width:    10931,
+                        city_width:     11436,
+                        desert_width:   11354,
+                        forest_width:   10978
+                    },
+                    iphone: {   
+                        name:           "iphone",   
+                        width:          480,     
+                        height:         320,
+                        beach_width:    2277,
+                        city_width:     2383,
+                        desert_width:   2366,
+                        forest_width:   2287
+                    },
+                    iphone4:{   
+                        name:           "iphone4",  
+                        width:          960,     
+                        height:         640,
+                        beach_width:    4555,
+                        city_width:     4765,
+                        desert_width:   4731,
+                        forest_width:   4574
+                    }
+                };
+                
+                var arrBackgrounds = [
+                                      "beach",
+                                      "city", 
+                                      "desert",
+                                      "forest"
+                                      ];
+                
+                var arrPlanes = [
+                                      "f16",
+                                      "piper", 
+                                      "boeing",
+                                      "sr71"
+                                      ];
+                
+                
+                
+                
+                function onBodyLoad(){
+                    
+                    for (var key in objDevices) {
+                        if(objDevices[key].width == document.width){
+                            arrDevice["name"] = objDevices[key].name;
+                            arrDevice["width"] = objDevices[key].width;
+                            arrDevice["height"] = objDevices[key].height;
+                            arrDevice["beach_width"] = objDevices[key].beach_width;
+                            arrDevice["city_width"] = objDevices[key].city_width;
+                            arrDevice["desert_width"] = objDevices[key].desert_width;
+                            arrDevice["forest_width"] = objDevices[key].forest_width;
+                        }
+                    }
+                    document.addEventListener("deviceready", funStartup, false);
+                }
+                
+                
+                function funBackgroundButtonClick(inc_event){
+                    
+                    
+                    var caller = inc_event.target || inc_event.srcElement;
+                    arrCallerId = caller.id.split("_");
+                    
+                    strBackgroundSelected = arrCallerId[2];
+                    
+                    
+                    strVariable = "mp3_" + strBackgroundSelected + "_" + strPlaneSelected;
+                    eval(strVariable + ".play();");
+                    
+                    mp3_buttons.pause();
+                    
+                    bkgId = "img_background_" + arrCallerId[2];
+                    bkgObject = document.getElementById(bkgId);
+                    bkgObject.style.visibility = "visible";
+                    bkgObject.style.display = "block";
+                    
+                    bkgId = "img_anim_" + strPlaneSelected;
+                    bkgObject = document.getElementById(bkgId);
+                    bkgObject.style.visibility = "visible";
+                    bkgObject.style.display = "block";
+                    
+                    for (var key in arrBackgrounds) {
+                        btnId = "img_button_" + arrBackgrounds[key];
+                        btnObject = document.getElementById(btnId);
+                        btnObject.style.visibility = "hidden";
+                        btnObject.style.display = "none";
+                    }
+                }
+                
+                
+                
+                function funAnimationOver(inc_event){
+                    
+                    mp3_buttons.play({numberOfLoops:99});
+                    
+                    bkgId = "img_background_" + strBackgroundSelected;
+                    bkgObject = document.getElementById(bkgId);
+                    bkgObject.style.visibility = "hidden";
+                    bkgObject.style.display = "none";
+                    
+                    bkgId = "img_anim_" + strPlaneSelected;
+                    bkgObject = document.getElementById(bkgId);
+                    bkgObject.style.visibility = "hidden";
+                    bkgObject.style.display = "none";
+                    
+                    for (var key in arrPlanes) {
+                        btnId = "img_button_" + arrPlanes[key];
+                        btnObject = document.getElementById(btnId);
+                        btnObject.style.visibility = "visible";
+                        btnObject.style.display = "block";
+                    }
+                    
+                    
+                }
+                
+                
+                function funPlaneButtonClick(inc_event){
+                    var caller = inc_event.target || inc_event.srcElement;
+                    arrCallerId = caller.id.split("_");
+                    strPlaneSelected = arrCallerId[2];
+                    for (var key in arrPlanes) {
+                        btnId = "img_button_" + arrPlanes[key];
+                        btnObject = document.getElementById(btnId);
+                        btnObject.style.visibility = "hidden";
+                        btnObject.style.display = "none";
+                    }
+                    for (var key in arrBackgrounds) {
+                        btnId = "img_button_" + arrBackgrounds[key];
+                        btnObject = document.getElementById(btnId);
+                        btnObject.style.visibility = "visible";
+                        btnObject.style.display = "block";
+                    }
+                }
+                
+                function funStartup(){
+                    
+                    document.body.style.backgroundImage = "url('sky_" + arrDevice["name"] + ".jpg')";
+                    
+                    for (var key in arrPlanes) {
+                        
+                        btnId = "img_button_" + arrPlanes[key];
+                        btnObject = document.getElementById(btnId);
+                        btnSrc = arrPlanes[key] + "_btn_" + arrDevice["name"] + ".png";
+                        btnObject.src = btnSrc
+                        btnObject.addEventListener("touchstart", function(e){funPlaneButtonClick(e);});
+                        
+                        
+                        btnId = "img_anim_" + arrPlanes[key];
+                        btnObject = document.getElementById(btnId);
+                        btnSrc = arrPlanes[key] + "_anm_" + arrDevice["name"] + ".png";
+                        btnObject.src = btnSrc;
+                        btnObject.style.webkitAnimationName = "anm_" + arrPlanes[key] + "_" + arrDevice["name"];
+                        
+                        
+                    }
+                    
+                    for (var key in arrBackgrounds) {
+                        
+                        btnId = "img_button_" + arrBackgrounds[key];
+                        btnObject = document.getElementById(btnId);
+                        btnSrc = arrBackgrounds[key] + "_btn_" + arrDevice["name"] + ".jpg";
+                        btnObject.src = btnSrc
+                        btnObject.addEventListener("touchstart", function(e){funBackgroundButtonClick(e);});
+
+                        
+                        bkgId = "img_background_" + arrBackgrounds[key];
+                        bkgObject = document.getElementById(bkgId);
+                        bkgSrc = arrBackgrounds[key] + "_combined_flat_" + arrDevice["name"] + ".jpg";
+                        bkgObject.src = bkgSrc
+                        bkgObject.style.webkitAnimationName = "anm_" + arrBackgrounds[key] + "_" + arrDevice["name"];
+                        bkgObject.style.width = arrDevice[arrBackgrounds[key] + "_width"] + "px";
+                        bkgObject.style.height = arrDevice["height"] + "px";
+                        bkgObject.addEventListener("webkitAnimationEnd", function(e){funAnimationOver(e);});
+                                                
+                    }
+                    
+                    
+                    mp3_buttons = new Media("buttons.mp3", funSuccess, funError);
+                    for (var key in arrPlanes) {
+                        for (var subkey in arrBackgrounds) {
+                            strVariable = "mp3_" + arrBackgrounds[subkey] + "_" + arrPlanes[key];
+                            strAudioFile = arrBackgrounds[subkey] + "_" + arrPlanes[key] + ".mp3";
+                            eval(strVariable + " = new Media('" + strAudioFile + "', funSuccess, funError);");
+                            eval(strVariable + ".play();");
+                            eval(strVariable + ".pause();");
+                        }
+                    }
+                    mp3_buttons.play({numberOfLoops:99});
+                    //mp3_buttons.pause();
+                    
+                    //my_media.play();
+                    
+                }
+                
+                
+                
+    	    	
+                /*
+                 <!---
+                 Landscape
+                 Dimensions      iPad        iPad 3      iPhone      iPhone 4
+                 ==================================================================
+                 Screen          1024x768    2048x1536   480x320     960x640
+                 Beach           5466x768   10931x1536  2277x320    4555x640
+                 City            5718x768   11436x1536  2383x320    4765x640
+                 Desert          5677x768   11354x1536  2366x320    4731x640
+                 Forest          5489x768   10978x1536  2287x320    4574x640
+                 --->
+                 */
+                </script>
+            <style>
+                
+                html, body, div{
+                    margin: 0px;
+                    padding: 0px;
+                    background-image: url('sky_ipad3.jpg');
+                    background-size: cover;
+                }
+                
+                
+                #img_button_beach, #img_button_city, #img_button_desert, #img_button_forest{
+                    float:left;
+                    visibility: hidden;
+                    display: none;
+                }
+                
+                #img_button_f16, #img_button_piper, #img_button_boeing, #img_button_sr71{
+                    float:left;
+                }
+                
+                
+                #img_background_beach, #img_background_city, #img_background_desert, #img_background_forest{
+                    -webkit-animation-timing-function: ease-in-out;
+                    -webkit-animation-duration: 30s;
+                    visibility: hidden;
+                    display: none;
+                }
+                
+                @-webkit-keyframes anm_beach_ipad{      0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-4442px,0);}}
+                @-webkit-keyframes anm_beach_ipad3{     0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-8883px,0);}}
+                @-webkit-keyframes anm_beach_iphone{    0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-1797px,0);}}
+                @-webkit-keyframes anm_beach_iphone4{   0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-3595px,0);}}
+                
+                @-webkit-keyframes anm_city_ipad{       0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-4694px,0);}}
+                @-webkit-keyframes anm_city_ipad3{      0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-9388px,0);}}
+                @-webkit-keyframes anm_city_iphone{     0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-1903px,0);}}
+                @-webkit-keyframes anm_city_iphone4{    0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-3805px,0);}}
+                
+                @-webkit-keyframes anm_desert_ipad{     0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-4653px,0);}}
+                @-webkit-keyframes anm_desert_ipad3{    0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-9306px,0);}}
+                @-webkit-keyframes anm_desert_iphone{   0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-1886px,0);}}
+                @-webkit-keyframes anm_desert_iphone4{  0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-3771px,0);}}
+                
+                @-webkit-keyframes anm_forest_ipad{     0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-4465px,0);}}
+                @-webkit-keyframes anm_forest_ipad3{    0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-8930px,0);}}
+                @-webkit-keyframes anm_forest_iphone{   0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-1807px,0);}}
+                @-webkit-keyframes anm_forest_iphone4{  0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(-3614px,0);}}
+                
+                
+                @-webkit-keyframes anm_piper_ipad{     0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(630px,0);}}
+                @-webkit-keyframes anm_piper_ipad3{    0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(1260px,0);}}
+                @-webkit-keyframes anm_piper_iphone{   0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(290px,0);}}
+                @-webkit-keyframes anm_piper_iphone4{  0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(580px,0);}}
+                
+                @-webkit-keyframes anm_boeing_ipad{     0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(630px,0);}}
+                @-webkit-keyframes anm_boeing_ipad3{    0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(1260px,0);}}
+                @-webkit-keyframes anm_boeing_iphone{   0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(290px,0);}}
+                @-webkit-keyframes anm_boeing_iphone4{  0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(580px,0);}}
+
+                @-webkit-keyframes anm_f16_ipad{     0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(630px,0);}}
+                @-webkit-keyframes anm_f16_ipad3{    0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(1260px,0);}}
+                @-webkit-keyframes anm_f16_iphone{   0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(290px,0);}}
+                @-webkit-keyframes anm_f16_iphone4{  0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(580px,0);}}
+                
+                @-webkit-keyframes anm_sr71_ipad{     0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(630px,0);}}
+                @-webkit-keyframes anm_sr71_ipad3{    0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(1260px,0);}}
+                @-webkit-keyframes anm_sr71_iphone{   0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(290px,0);}}
+                @-webkit-keyframes anm_sr71_iphone4{  0%{-webkit-transform:translate(0,0);}100%{-webkit-transform: translate(580px,0);}}
+                
+                #img_anim_piper, #img_anim_boeing, #img_anim_f16, #img_anim_sr71{
+                    position: absolute;
+                    left: 0px;
+                    top: 20px;
+                    -webkit-animation-timing-function: ease-in-out;
+                    -webkit-animation-duration: 30s;
+                    visibility: hidden;
+                    display: none;
+                }
+                </style>
+            </head>
+    <body onload="onBodyLoad()" id="body_container">
+        <img id="img_button_piper" src="" />
+        <img id="img_button_boeing" src="" />
+        <img id="img_button_f16" src="" />
+        <img id="img_button_sr71" src="" />
+        <img id="img_button_beach" src="" />
+        <img id="img_button_city" src="" />
+        <img id="img_button_desert" src="" />
+        <img id="img_button_forest" src="" />
+        <img id="img_background_beach" src="" /> 
+        <img id="img_background_city" src="" /> 
+        <img id="img_background_desert" src="" /> 
+        <img id="img_background_forest" src="" /> 
+        <img id="img_anim_piper" />
+        <img id="img_anim_boeing" />
+        <img id="img_anim_f16" />
+        <img id="img_anim_sr71" />
+    </body>
+</html>
